@@ -921,10 +921,10 @@ function Library:create(options)
 
 	
 creditsTab:credit{Name = "Owner: IHateSchool"}
-creditsTab:credit{Name = "Script Devs:", "IhateSchool, Cazed, BitrarOFC, Ernestlin"}
-creditsTab:credit{Name = "Testers:", "JinxMoke, ThugLifEven, Jwiehan, Jo1c, Pete <3, Vaxeal"}
-creditsTab:credit{Name = "#1 Tester:", "Vaxeal"}
-creditsTab:credit{Name = "Ui Devs", "Abstract & Deity"}
+creditsTab:credit{Name = "Script Devs: IhateSchool, Cazed, BitrarOFC, Ernestlin"}
+creditsTab:credit{Name = "Testers: JinxMoke, ThugLifEven, Jwiehan, Jo1c, Pete <3, Vaxeal"}
+creditsTab:credit{Name = "#1 Tester: Vaxeal"}
+creditsTab:credit{Name = "Ui Devs: Abstract & Deity"}
   
 	return mt
 end
