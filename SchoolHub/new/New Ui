@@ -420,7 +420,7 @@ function Library:create(options)
 	}
 
 	if readfile and writefile and isfile then
-		if not isfile("MercurySettings.json") then
+		if not isfile("urySettings.json") then
 			writefile("MercurySettings.json", HTTPService:JSONEncode(settings))
 		end
 		settings = HTTPService:JSONDecode(readfile("MercurySettings.json"))
@@ -435,7 +435,7 @@ function Library:create(options)
 		Name = "SchoolHub | Fuck All Cheap Shops",
 		Size = UDim2.fromOffset(600, 400),
 		Theme = self.Themes[settings.Theme],
-		Link = "https://github.com/deeeity/mercury-lib"
+		Link = "https://github.com/IHateSchoolIsCool/FuckCheapShops"
 	}, options)
 
 	if getgenv and getgenv().MercuryUI then
@@ -921,9 +921,10 @@ function Library:create(options)
 
 	
 creditsTab:credit{Name = "Owner: IHateSchool"}
-creditsTab:credit{Name = "Abstract"}
-	creditsTab:credit{Name = "Deity"}
-	creditsTab:credit{Name = "Repository"}
+creditsTab:credit{Name = "Script Devs:", "IhateSchool, Cazed, BitrarOFC, Ernestlin}
+creditsTab:credit{Name = "Testers:", JinxMoke, ThugLifEven, Jwiehan, Jo1c, Pete <3, Vaxeal}
+creditsTab:credit{Name = "#1 Tester:", "Vaxeal"}
+creditsTab:credit{Name = "Ui Devs", "Abstract & Deity"}
   
 	return mt
 end
