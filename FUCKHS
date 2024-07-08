@@ -1,3 +1,157 @@
+-- Set Player Name Below:
+local PlayerName = game.Players.LocalPlayer--"david_mario897" "GavintheGreat83" 
+for i,v in pairs(game.Players:GetChildren()) do
+    --print("i,v",i,v)
+    if v.Name == PlayerName then
+        PlayerName = v
+    end
+end
+
+
+local Main = {}
+local TotalBuilt = 0
+local MaxVal = 48
+local ManyC = 0
+local Remote = game.ReplicatedStorage.PlaceStructure.ClientPlacedStructure
+
+--print("Removing Blueprints")
+for i, v in pairs(game.Workspace.PlayerModels:GetChildren()) do
+    if v:FindFirstChild("Owner") and v.Owner.Value == game.Players.LocalPlayer and v:FindFirstChild("Type") and v.Type.Value == "Blueprint" then
+        game.ReplicatedStorage.Interaction.DestroyStructure:FireServer(v)
+    end
+end
+--print("Blueprints Removed")
+
+
+local ToFillCounter = 0
+local function ToFill(v,Col)
+    ToFillCounter = ToFillCounter+1
+    --print("in fill",v.Name,v.PrimaryPart.CFrame)
+    ManyC = ManyC + 1
+        Remote:FireServer(v.Name, v.PrimaryPart.CFrame, tostring(PlayerName), Col, v, true)
+        TotalBuilt = TotalBuilt + 1
+        --old grey
+        --Remote:FireServer(v.ItemName.Value, v.PrimaryPart.CFrame, Plr, nil, v, true)
+    ManyC = ManyC - 2
+end
+
+
+local SpawnBpCounter = 0
+local function SpawnBp(Name, cframe)
+    SpawnBpCounter = SpawnBpCounter+1
+    --print("in spawnbp",Name,cframe)
+    game:GetService("ReplicatedStorage").PlaceStructure.ClientPlacedBlueprint:FireServer(Name, cframe, tostring(PlayerName))
+    ManyC = ManyC + 1
+end
+
+
+-- Script:
+local Tag
+for i,v in pairs(Workspace.Properties:GetChildren()) do
+   if v.Owner.Value == PlayerName then
+      Tag = v.OriginSquare.CFrame
+   end
+end
+
+--print("got tag",Tag)
+local ItsCFrame
+for i,v in pairs(game.Workspace.PlayerModels:GetChildren()) do
+   if v:FindFirstChild("Owner") and v.Owner.Value == PlayerName then
+      if v:FindFirstChild("Type") and v.Type.Value == "Blueprint" then
+         if v:FindFirstChild("MainCFrame") then
+         else
+            ItsCFrame = v.PrimaryPart.CFrame
+         end
+         if v ~= nil then
+
+            Remote:FireServer(v.Name, ItsCFrame, game.Players.LocalPlayer, "", v, false)
+         end
+      end
+   end
+end
+--print("got ItsCFrame",ItsCFrame)
+
+local LDR = game.ReplicatedStorage.LoadSaveRequests
+
+local RS
+if game.ReplicatedStorage.LoadSaveRequests:FindFirstChild("RequestSave") then
+    RS = LDR.RequestSave
+end
+
+
+local Vec = Vector3.new
+local Ang = CFrame.Angles
+local Plr = game.Players.LocalPlayer
+
+local SetBpCounter = 0
+
+
+function SetBp(WT, Count)
+    if WT == "Grey" then
+        WT = nil
+    end
+    
+    print("Total Built=",TotalBuilt,". Now Building ",Count,WT,"/",#Main)
+    if LDR:FindFirstChild("RequestSave") then
+        RS.Parent = nil
+    end
+    
+    local ToWait = 1
+    local Remote = game.ReplicatedStorage.PlaceStructure.ClientPlacedStructure
+    
+    local V1 = game.Workspace.PlayerModels.ChildAdded:connect(function(v)
+    if v:WaitForChild("Owner", 1) and v:WaitForChild("ItemName", 1) and v:WaitForChild("Type", 1) and v.Type.Value == "Blueprint" and v.Owner.Value == PlayerName then 
+        ToFill(v,WT)
+    end
+    end)
+    
+    for i, v in pairs(Main) do
+
+        if ManyC > MaxVal then 
+            repeat 
+                game:GetService("RunService").RenderStepped:wait() 
+            until ManyC < MaxVal 
+        end
+
+            SpawnBp(v[1], v[2])
+        if ToWait > 2 then 
+            game:GetService("RunService").RenderStepped:wait()
+            ToWait = 1 
+        else 
+            ToWait = ToWait + 1 
+        end
+        
+    end
+    repeat
+        local co = 0
+        for i, v in pairs(game.Workspace.PlayerModels:GetChildren()) do
+            if v:FindFirstChild("Owner") and v.Owner.Value == PlayerName and v:FindFirstChild("Type") and v.Type.Value == "Blueprint" then
+                co=co+1
+            end
+        end
+        wait(5)
+        print(co,"x",WT,"Stuck.","Tofill",Count,"/",ToFillCounter,"Spawn",SpawnBpCounter)
+    until co <= 0
+
+    if RS then RS.Parent = LDR end
+
+    V1:Disconnect()
+
+   Main = {}
+   ToFillCounter = 0
+   SpawnBpCounter = 0
+   SetBpCounter=SetBpCounter+1
+   print("TotalBuilt=",TotalBuilt,"Completed",SetBpCounter,"x SetBps",WT,Count)
+end
+
+
+function Sbp(A_1, A_2, A_3)
+    local Saver = {}
+    table.insert(Saver,A_1)
+    table.insert(Saver,A_2)
+    table.insert(Main,Saver)
+end
+
 
 Sbp('Wall2Tall',Tag*Ang(1.5707963705062866, 0, 1.5707963705062866) + Vec(35.9000244140625, 0.6000000238418579, -17), Plr)
 Sbp('Wall2Tall',Tag*Ang(1.5707963705062866, 0, -0) + Vec(30, 1.600000023841858, -22.899993896484375), Plr)
@@ -1985,4 +2139,3 @@ Sbp('Wall2Thin',Tag*Ang(1.5707963705062866, -0, -3.1415927410125732) + Vec(38, 3
 Sbp('Wall2Thin',Tag*Ang(1.5707963705062866, -0, -3.1415927410125732) + Vec(38, 31.600000381469727, -19.100006103515625), Plr)
 Sbp('Wall2ShortThin',Tag*Ang(-1.5707963705062866, -0, -0) + Vec(-29, 0.6000000238418579, 45.899993896484375), Plr)
 wait(4.135714285714286)SetBp("Grey", 878)
-print(Done)
