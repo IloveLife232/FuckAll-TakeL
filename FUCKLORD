@@ -1,5 +1,5 @@
 -- Set Player Name Below:
-local PlayerName = "LocalPlayer"
+local PlayerName = game.Players.LocalPlayer--"david_mario897" "GavintheGreat83" 
 local wallcounter = 0
 
 -- Script:
